@@ -2,61 +2,25 @@
 #include <stdlib.h>
 #include "dirent.h"
 #include "string.h"
-// Define the linked list
+
 
 struct Node{
     char *name;
     struct Node *next;
 };
-struct Node *current = NULL;
 
-void insertAfter(struct Node* prev_node, char* new_data)
-{
-    /*1. check if the given prev_node is NULL */
-    if (prev_node == NULL)
-    {
-        printf("the given previous node cannot be NULL");
-        return;
-    }
 
-    /* 2. allocate new node */
-    struct Node* new_node =(struct Node*) malloc(sizeof(struct Node));
+void insertAfter(struct Node* prev_node, char* new_data);
 
-    /* 3. put in the data */
-    new_node->name = new_data;
 
-    /* 4. Make next of new node as next of prev_node */
-    new_node->next = prev_node->next;
-
-    /* 5. move the next of prev_node as new_node */
-    prev_node->next = new_node;
-}
-// End of linked list definition
 
 void alp(struct Node* x[26]);
 
-char *strsplt(const char* ranstr, int x){
-    char* re = (char*) malloc(sizeof(char*));
-    for(int e=0; e<x; e++){
-        re[e] = ranstr[e];
-    }
-    re[x] = '\n';
-    re[x+1] = '\0';
-    return re;
-}
-void printList(struct Node* n, char* sample)
-{
-    while (n != NULL) {
+char *strsplt(const char* ranstr, int x);
 
-        if(strcmp(strsplt(n->name, strlen(sample)-1), sample) == 0) {
-            printf("%s\n", n->name);
-        }
-        n = n->next;
-    }
-}
+void printList(struct Node* n, char* sample);
 
-
-
+void insertionSort(char* arr[], int n);
 
 
 int main(){
@@ -66,7 +30,8 @@ int main(){
     path = (char *) malloc(sizeof(char*));
     printf("Please enter your Directory");
     scanf("%[ -/0-9a-z:-@A-Z[-`]", path);
-    char *prefix = (char *)malloc(sizeof(char*));
+    char *prefix = NULL;
+    prefix = (char *) malloc(sizeof(char*));
     while ((getchar()) != '\n');
     while(x) {
         fflush(stdin);
@@ -89,7 +54,6 @@ int main(){
 
         //Getting the entry of given directory/ sorting
         int file_count = 0; //This will be used for the for loop, iterating through the filnames
-        FILE *fp;
         DIR *d;
         struct dirent *dir;
         char *filenames[225];//A pointer points to string of filenames, each having a {MAX_NUMBER} 0f 225.
@@ -106,7 +70,7 @@ int main(){
             }
             closedir(d);
         }
-
+        insertionSort(filenames, file_count);
         //Using the Filename's indexes, i will insertAfter each entry into fitting linked List.
         for (int index = 0; index < file_count; index++) {
             if (filenames[index][0] > 64 && filenames[index][0] < 92) {
@@ -117,9 +81,8 @@ int main(){
                 insertAfter(list[filenames[index][0] - 97], filenames[index]);
             }
         }
-        char* a4 =  strsplt(list[3]->next->name, 1);
-        struct Node* current2 = NULL;
-        current2 = (struct Node*) malloc(sizeof(struct Node));
+
+
         for(int x2=0; x2<26; x2++){
             if(list[x2]->name[0] == prefix[0]){
                 printf("Files starting with %s", prefix);
@@ -127,19 +90,7 @@ int main(){
             }
         }
         }
-
-
-
-
-
-
-
     //end of Sort
-
-
-
-
-
     return 0;
 }
 
@@ -147,9 +98,71 @@ int main(){
 
 
 
+//Function initializations
+void insertAfter(struct Node* prev_node, char* new_data)
+{
+    /*1. check if the given prev_node is NULL */
+    if (prev_node == NULL)
+    {
+        printf("the given previous node cannot be NULL");
+        return;
+    }
+
+    /* 2. allocate new node */
+    struct Node* new_node =(struct Node*) malloc(sizeof(struct Node));
+
+    /* 3. put in the data */
+    new_node->name = new_data;
+
+    /* 4. Make next of new node as next of prev_node */
+    new_node->next = prev_node->next;
+
+    /* 5. move the next of prev_node as new_node */
+    prev_node->next = new_node;
+}
+
+void insertionSort(char* arr[], int n)
+{
+    int i, j;
+    char* key;
+    for (i = 1; i < n; i++) {
+        key = arr[i];
+        j = i - 1;
+
+        /* Move elements of arr[0..i-1], that are
+          greater than key, to one position ahead
+          of their current position */
+        while (j >= 0 && (strcmp(arr[j], key)) == 1) {
+            arr[j + 1] = arr[j];
+            j = j - 1;
+        }
+        arr[j + 1] = key;
+    }
+}
+
+void printList(struct Node* n, char* sample)
+{
+    while (n != NULL) {
+
+        if(strcmp(strsplt(n->name, strlen(sample)-1), sample) == 0) {
+            printf("%s\n", n->name);
+        }
+        n = n->next;
+    }
+}
+
+char *strsplt(const char* ranstr, int x){
+    char* re = (char*) malloc(sizeof(char*));
+    for(int e=0; e<x; e++){
+        re[e] = ranstr[e];
+    }
+    re[x] = '\n';
+    re[x+1] = '\0';
+    return re;
+}
 
 
-void alp(struct Node *x[26]){
+void alp(struct Node *x[26]) {
     x[0]->name = "A";
     x[1]->name = "B";
     x[2]->name = "C";
@@ -177,3 +190,4 @@ void alp(struct Node *x[26]){
     x[24]->name = "Y";
     x[25]->name = "Z";
 }
+//End of code
