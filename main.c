@@ -44,10 +44,10 @@ char *strsplt(const char* ranstr, int x){
     re[x+1] = '\0';
     return re;
 }
-void printList(struct Node* n)
+void printList(struct Node* n, char* sample)
 {
     while (n != NULL) {
-        if(strcmp(strsplt(n->name, 3), "Dow\n") == 0) {
+        if(strcmp(strsplt(n->name, strlen(sample)-1), sample) == 0) {
             printf(" %s\n ", n->name);
         }
         n = n->next;
@@ -63,14 +63,13 @@ int main(){
     int x = 1;
     char *direct = NULL;
     direct = (char *) malloc(sizeof(char*));
-    printf("Please enter a directory:\n");
     scanf("%[ -/0-9a-z:-@A-Z[-`]", direct);
     char *prefix = (char *)malloc(sizeof(char*));
     while ((getchar()) != '\n');
     while(x) {
         fflush(stdin);
         printf("Enter a prefix\n");
-        fgets(prefix, 5, stdin);
+        fgets(prefix, 7, stdin);
         printf("%s\n", prefix);
         printf("%s\n", direct);
         if(prefix[0] == '\n'){
@@ -107,7 +106,6 @@ int main(){
             }
             closedir(d);
         }
-        printf("%i\n", file_count);
 
         //Using the Filename's indexes, i will insertAfter each entry into fitting linked List.
         for (int index = 0; index < file_count; index++) {
@@ -122,10 +120,9 @@ int main(){
         char* a4 =  strsplt(list[3]->next->name, 1);
         struct Node* current2 = NULL;
         current2 = (struct Node*) malloc(sizeof(struct Node));
-        printf("%d\n", strcmp(a4, prefix));
         for(int x2=0; x2<26; x2++){
             if(list[x2]->name[0] == prefix[0]){
-                printList(list[x2]);
+                printList(list[x2], prefix);
             }
         }
         }
