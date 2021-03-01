@@ -47,8 +47,9 @@ char *strsplt(const char* ranstr, int x){
 void printList(struct Node* n, char* sample)
 {
     while (n != NULL) {
+
         if(strcmp(strsplt(n->name, strlen(sample)-1), sample) == 0) {
-            printf(" %s\n ", n->name);
+            printf("%s\n", n->name);
         }
         n = n->next;
     }
@@ -61,17 +62,16 @@ void printList(struct Node* n, char* sample)
 int main(){
 
     int x = 1;
-    char *direct = NULL;
-    direct = (char *) malloc(sizeof(char*));
-    scanf("%[ -/0-9a-z:-@A-Z[-`]", direct);
+    char *path = NULL;
+    path = (char *) malloc(sizeof(char*));
+    printf("Please enter your Directory");
+    scanf("%[ -/0-9a-z:-@A-Z[-`]", path);
     char *prefix = (char *)malloc(sizeof(char*));
     while ((getchar()) != '\n');
     while(x) {
         fflush(stdin);
         printf("Enter a prefix\n");
         fgets(prefix, 7, stdin);
-        printf("%s\n", prefix);
-        printf("%s\n", direct);
         if(prefix[0] == '\n'){
             x = 0;
         }
@@ -94,7 +94,7 @@ int main(){
         struct dirent *dir;
         char *filenames[225];//A pointer points to string of filenames, each having a {MAX_NUMBER} 0f 225.
         int i = 0;
-        d = opendir("C:\\Users\\trinh");
+        d = opendir(path);
         if (d) {
             while ((dir = readdir(d)) != NULL) {
 
@@ -122,6 +122,7 @@ int main(){
         current2 = (struct Node*) malloc(sizeof(struct Node));
         for(int x2=0; x2<26; x2++){
             if(list[x2]->name[0] == prefix[0]){
+                printf("Files starting with %s", prefix);
                 printList(list[x2], prefix);
             }
         }
