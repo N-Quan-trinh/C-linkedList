@@ -8,20 +8,6 @@ struct Node{
     char *name;
     struct Node *next;
 };
-
-char* printList(struct Node *node)
-{   char *returnString = NULL;
-    returnString = (char*) malloc(sizeof (char*));
-
-    while (node->next !=NULL){
-        strcat(returnString, node->name);
-        node = node->next;
-    }
-    if (node->next == NULL){
-        return node->name;
-    }
-    return returnString;
-}
 struct Node *current = NULL;
 
 void insertAfter(struct Node* prev_node, char* new_data)
@@ -49,10 +35,31 @@ void insertAfter(struct Node* prev_node, char* new_data)
 
 void alp(struct Node* x[26]);
 
+char *strsplt(const char* ranstr, int x){
+    char* re = (char*) malloc(sizeof(char*));
+    for(int e=0; e<x; e++){
+        re[e] = ranstr[e];
+    }
+    re[x] = '\n';
+    re[x+1] = '\0';
+    return re;
+}
+void printList(struct Node* n)
+{
+    while (n != NULL) {
+        if(strcmp(strsplt(n->name, 3), "Dow\n") == 0) {
+            printf(" %s\n ", n->name);
+        }
+        n = n->next;
+    }
+}
+
+
 
 
 
 int main(){
+
     int x = 1;
     char *direct = NULL;
     direct = (char *) malloc(sizeof(char*));
@@ -72,11 +79,11 @@ int main(){
         // create an Array of 26 elements, with each having the head's value of an alphabet
 
         struct Node *list[26];
-        for (int x = 0; x < 26; x++) {
+        for (int item = 0; item < 26; item++) {
             struct Node *first = (struct Node *) malloc(sizeof(struct Node));
             first->name = ".";
             first->next = NULL;
-            list[x] = first;
+            list[item] = first;
         }
         alp(list);
 
@@ -88,7 +95,7 @@ int main(){
         struct dirent *dir;
         char *filenames[225];//A pointer points to string of filenames, each having a {MAX_NUMBER} 0f 225.
         int i = 0;
-        d = opendir(direct);
+        d = opendir("C:\\Users\\trinh");
         if (d) {
             while ((dir = readdir(d)) != NULL) {
 
@@ -103,21 +110,34 @@ int main(){
         printf("%i\n", file_count);
 
         //Using the Filename's indexes, i will insertAfter each entry into fitting linked List.
-        for (int x = 0; x < file_count; x++) {
-            if (filenames[x][0] > 64 && filenames[x][0] < 92) {
+        for (int index = 0; index < file_count; index++) {
+            if (filenames[index][0] > 64 && filenames[index][0] < 92) {
 
-                insertAfter(list[filenames[x][0] - 65], filenames[x]);
-            } else if (filenames[x][0] > 96 && filenames[x][0] < 123) {
+                insertAfter(list[filenames[index][0] - 65], filenames[index]);
+            } else if (filenames[index][0] > 96 && filenames[index][0] < 123) {
 
-                insertAfter(list[filenames[x][0] - 97], filenames[x]);
+                insertAfter(list[filenames[index][0] - 97], filenames[index]);
             }
         }
-    }
+        char* a4 =  strsplt(list[3]->next->name, 1);
+        struct Node* current2 = NULL;
+        current2 = (struct Node*) malloc(sizeof(struct Node));
+        printf("%d\n", strcmp(a4, prefix));
+        for(int x2=0; x2<26; x2++){
+            if(list[x2]->name[0] == prefix[0]){
+                printList(list[x2]);
+            }
+        }
+        }
+
+
+
 
 
 
 
     //end of Sort
+
 
 
 
