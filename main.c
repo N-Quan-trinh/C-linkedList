@@ -9,13 +9,18 @@ struct Node{
     struct Node *next;
 };
 
-void printList(struct Node *node)
-{   printf("[");
-    while (node !=NULL){
-        printf("%s,", node->name);
+char* printList(struct Node *node)
+{   char *returnString = NULL;
+    returnString = (char*) malloc(sizeof (char*));
+
+    while (node->next !=NULL){
+        strcat(returnString, node->name);
         node = node->next;
     }
-    printf("]\n");
+    if (node->next == NULL){
+        return node->name;
+    }
+    return returnString;
 }
 struct Node *current = NULL;
 
@@ -48,52 +53,64 @@ void alp(struct Node* x[26]);
 
 
 int main(){
-    printf("please enter a directory: ");
+    int x = 1;
     char *direct = NULL;
     direct = (char *) malloc(sizeof(char*));
+    printf("Please enter a directory:\n");
     scanf("%[ -/0-9a-z:-@A-Z[-`]", direct);
-    printf("%s\n", direct);
-    // create an Array of 26 elements, with each having the head's value of an alphabet
-
-    struct Node *list[26];
-    for(int x=0; x<26; x++){
-        struct Node* first = (struct Node*) malloc(sizeof(struct Node));
-        first->name = ".";
-        first->next= NULL;
-        list[x] = first;
-    }
-    alp(list);
-
-
-    //Getting the entry of given directory/ sorting
-    int file_count = 0;
-    FILE *fp;
-    DIR           *d;
-    struct dirent *dir;
-    char *filenames[225];
-    int i = 0;
-    d = opendir(direct);
-    if (d)
-    {
-        while ((dir = readdir(d)) != NULL)
-        {
-
-            filenames[i] = malloc(strlen(dir->d_name)+1);
-            strcpy(filenames[i],dir->d_name);
-            i++;
-            file_count++;
-
+    char *prefix = (char *)malloc(sizeof(char*));
+    while ((getchar()) != '\n');
+    while(x) {
+        fflush(stdin);
+        printf("Enter a prefix\n");
+        fgets(prefix, 5, stdin);
+        printf("%s\n", prefix);
+        printf("%s\n", direct);
+        if(prefix[0] == '\n'){
+            x = 0;
         }
-        closedir(d);
-    }
-    printf("%i", file_count);
-    for(int x=0; x<file_count; x++) {
-        if(filenames[x][0] > 64 && filenames[x][0] <92) {
+        // create an Array of 26 elements, with each having the head's value of an alphabet
 
-            insertAfter(list[filenames[x][0] - 65], filenames[x]);
-        } else if(filenames[x][0] > 96 && filenames[x][0] <123){
+        struct Node *list[26];
+        for (int x = 0; x < 26; x++) {
+            struct Node *first = (struct Node *) malloc(sizeof(struct Node));
+            first->name = ".";
+            first->next = NULL;
+            list[x] = first;
+        }
+        alp(list);
 
-            insertAfter(list[filenames[x][0] - 97], filenames[x]);
+
+        //Getting the entry of given directory/ sorting
+        int file_count = 0; //This will be used for the for loop, iterating through the filnames
+        FILE *fp;
+        DIR *d;
+        struct dirent *dir;
+        char *filenames[225];//A pointer points to string of filenames, each having a {MAX_NUMBER} 0f 225.
+        int i = 0;
+        d = opendir(direct);
+        if (d) {
+            while ((dir = readdir(d)) != NULL) {
+
+                filenames[i] = malloc(strlen(dir->d_name) + 1);
+                strcpy(filenames[i], dir->d_name);
+                i++;
+                file_count++;
+
+            }
+            closedir(d);
+        }
+        printf("%i\n", file_count);
+
+        //Using the Filename's indexes, i will insertAfter each entry into fitting linked List.
+        for (int x = 0; x < file_count; x++) {
+            if (filenames[x][0] > 64 && filenames[x][0] < 92) {
+
+                insertAfter(list[filenames[x][0] - 65], filenames[x]);
+            } else if (filenames[x][0] > 96 && filenames[x][0] < 123) {
+
+                insertAfter(list[filenames[x][0] - 97], filenames[x]);
+            }
         }
     }
 
