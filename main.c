@@ -26,12 +26,15 @@ void insertionSort(char* arr[], int n);
 int main(){
 
     int x = 1;
-    char *path = NULL;
-    path = (char *) malloc(sizeof(char*));
+    char path[100];
     printf("Please enter your Directory");
     scanf("%[ -/0-9a-z:-@A-Z[-`]", path);
     char *prefix = NULL;
     prefix = (char *) malloc(sizeof(char*));
+    if(prefix == NULL){
+        printf("can't create memory for prefix!");
+        return 0;
+    }
     while ((getchar()) != '\n');
     while(x) {
         fflush(stdin);
